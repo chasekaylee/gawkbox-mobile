@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"gawkbox-assignment/twitch"
 	"net/http"
+
+	"github.com/chasekaylee/gawkbox-mobile/twitch"
 )
 
 func main() {
@@ -19,7 +20,6 @@ func main() {
 // myHandlerFunc - A sample handler function for the route /sample_route for your HTTP server
 func myHandlerFunc(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Recieved the following request:", r.Body)
-
 	twitch.DoSomething()
 
 	// YOUR ROUTES LOGIC GOES HERE
