@@ -77,7 +77,6 @@ func GetUserStream(id string) (StreamData, bool) {
 	body, readErr := ioutil.ReadAll(res.Body)
 	checkErr(readErr)
 	res.Body.Close()
-	fmt.Println(string(body))
 	if string(body) == `{"stream":null}` {
 		online = false
 	}
