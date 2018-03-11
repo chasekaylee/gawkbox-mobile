@@ -1,5 +1,10 @@
 package twitch
 
+// Featured =>
+type Featured struct {
+	Data []StreamData `json:"featured"`
+}
+
 // Streamers =>
 type Streamers struct {
 	Users []Streamer `json:"users"`

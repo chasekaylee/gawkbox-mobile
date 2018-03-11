@@ -2,9 +2,9 @@ package twitch
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -19,70 +19,120 @@ func SetID(clientID string) {
 	tID = clientID
 }
 
-func checkErr(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 // GetStreamer => takes in a search query username
 // returns a Streamer struct for that specified username
-func GetStreamer(name string) Streamer {
+// & an error relative to where the function fails
+func GetStreamer(name string) (Streamer, error) {
 	var streamer Streamers
 
 	twitClient := http.Client{
-		Timeout: time.Second * 2, // Maximum of 2 secs
+		Timeout: time.Second * 200, // Maximum of 2 secs
 	}
 
 	req, err := http.NewRequest(http.MethodGet, "https://api.twitch.tv/kraken/users?login="+name, nil)
-	checkErr(err)
+	if err != nil {
+		return streamer.Users[0], err
+	}
 
 	req.Header.Set("Accept", accept)
 	req.Header.Add("Client-ID", tID)
 
 	res, getErr := twitClient.Do(req)
-	checkErr(getErr)
+	if getErr != nil {
+		return streamer.Users[0], getErr
+	}
 
 	body, readErr := ioutil.ReadAll(res.Body)
-	checkErr(readErr)
+	if readErr != nil {
+		return streamer.Users[0], readErr
+	}
+
 	res.Body.Close()
 
 	err = json.Unmarshal([]byte(body), &streamer)
-	checkErr(err)
+	if err != nil {
+		return streamer.Users[0], err
+	}
 
 	t := streamer.Users[0]
 
-	return t
+	return t, nil
 }
 
 // GetUserStream => takes in a channel ID
 // returns a Stream struct for that specified channel ID
-func GetUserStream(id string) (StreamData, bool) {
+// & an error relative to where the function fails
+func GetUserStream(id string) (StreamData, error) {
 	var stream StreamData
-	var online = true
 
 	twitClient := http.Client{
-		Timeout: time.Second * 2, // Maximum of 2 secs
+		Timeout: time.Second * 200, // Maximum of 2 secs
 	}
 
 	req, err := http.NewRequest(http.MethodGet, "https://api.twitch.tv/kraken/streams/"+id, nil)
-	checkErr(err)
+	if err != nil {
+		return stream, err
+	}
 
 	req.Header.Set("Accept", accept)
 	req.Header.Add("Client-ID", tID)
 
 	res, getErr := twitClient.Do(req)
-	checkErr(getErr)
+	if getErr != nil {
+		return stream, getErr
+	}
 
 	body, readErr := ioutil.ReadAll(res.Body)
-	checkErr(readErr)
+	if readErr != nil {
+		return stream, readErr
+	}
+
 	res.Body.Close()
 	if string(body) == `{"stream":null}` {
-		online = false
+		return stream, errors.New("Stream is currently offline")
 	}
 
 	err = json.Unmarshal([]byte(body), &stream)
-	checkErr(err)
+	if err != nil {
+		return stream, err
+	}
 
-	return stream, online
+	return stream, nil
+}
+
+// GetFeaturedStreams =>
+// returns a Featured struct for the top 10 featured streams
+// & an error relative to where the function fails
+func GetFeaturedStreams() (Featured, error) {
+	var featured Featured
+
+	twitClient := http.Client{
+		Timeout: time.Second * 200, // Maximum of 2 secs
+	}
+
+	req, err := http.NewRequest(http.MethodGet, "https://api.twitch.tv/kraken/streams/featured?limit=10", nil)
+	if err != nil {
+		return featured, err
+	}
+
+	req.Header.Set("Accept", accept)
+	req.Header.Add("Client-ID", tID)
+
+	res, getErr := twitClient.Do(req)
+	if getErr != nil {
+		return featured, getErr
+	}
+
+	body, readErr := ioutil.ReadAll(res.Body)
+	if readErr != nil {
+		return featured, readErr
+	}
+	res.Body.Close()
+
+	err = json.Unmarshal([]byte(body), &featured)
+	if err != nil {
+		return featured, err
+	}
+
+	return featured, nil
 }
