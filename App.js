@@ -1,17 +1,20 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
-    );
-  }
-}
+import StreamList from './client/views/StreamList';
+import StreamListEntry from './client/views/StreamListEntry';
+import StreamDetails from './client/views/StreamDetails';
+import Home from './client/views/Home';
+
+export default () => <AppNavigator />;
+
+const AppNavigator = StackNavigator({
+  Home: { screen: Home },
+  StreamListScreen: { screen: StreamList },
+  StreamListEntry: { screen: StreamListEntry },
+  StreamDetails: { screen: StreamDetails },
+});
 
 const styles = StyleSheet.create({
   container: {
