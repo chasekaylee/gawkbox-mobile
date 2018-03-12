@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image, WebView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import axios from 'axios';
 
 import SearchBar from '../components/SearchBar';
@@ -92,6 +92,7 @@ export default class Home extends Component {
     } else {
       offlineMessage = <Offline />;
     }
+
     return (
       <View>
         <SearchBar search={this.search} loading={this.state.loading} />

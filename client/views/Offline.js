@@ -1,14 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 
 export default (props) => {
   console.log(props);
   return (
     <View>
-      <Image
-        source={require('../images/offline.png')}
-        style={{ marginTop: 20, width: '100%', height: '75%' }}
-      />
+      <Image source={require('../images/offline.png')} style={styles.image} />
     </View>
   );
 };
@@ -18,5 +15,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  image: {
+    marginTop: 20,
+    width: '100%',
+    height: '75%',
   },
 });
