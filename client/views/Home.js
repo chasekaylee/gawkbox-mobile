@@ -69,7 +69,7 @@ export default class Home extends Component {
       })
       .catch((error) => {
         this.setState({ loading: false });
-        if (error.response && error.response.status === 404) {
+        if (error.response && error.response.status === 400) {
           this.setState({ offline: true });
         } else {
           console.log(error);
