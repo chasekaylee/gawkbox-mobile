@@ -68,7 +68,6 @@ If you haven't installed Docker yet see [REQUIREMENTS](#requirements)
 WITH DOCKER CLOUD
 
 ```sh
-npm install
 docker pull chasekaylee/gawkbox-mobile
 docker run -p 8080:8080 chasekaylee/gawkbox-mobile
 npm run ios
@@ -77,7 +76,6 @@ npm run ios
 WITHOUT DOCKER CLOUD
 
 ```sh
-npm install
 docker build -t gawkbox-mobile .
 docker run -p 8080:8080 gawkbox-mobile
 npm run ios
@@ -88,7 +86,6 @@ npm run ios
 If you haven't installed GO yet see [REQUIREMENTS](#requirements)
 
 ```
-npm install
 go build
 go run main.go OR ./gawkbox-mobile
 npm run ios
